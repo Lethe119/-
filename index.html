@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料結構教學網</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-layout">
+        <nav class="sidebar">
+            <div class="brand">資料結構教學網 <span class="tag">Pro</span></div>
+            <ul class="menu">
+                <li class="active" onclick="switchTab('arrays')">1. 陣列 (Arrays)</li>
+                <li onclick="switchTab('stacks')">2. 堆疊與佇列 (Stack/Queue)</li>
+                <li onclick="switchTab('linkedlists')">3. 鏈結串列 (Linked Lists)</li>
+                <li onclick="switchTab('trees')">4. 二元搜尋樹 (BST)</li>
+                <li onclick="switchTab('graphs')">5. 圖論基礎 (Graphs)</li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            
+            <section id="arrays" class="view active">
+                <header>
+                    <h1>1. 動態陣列 (Dynamic Arrays)</h1>
+                    <div class="complexity-badges">
+                        <span class="badge green">Access: O(1)</span>
+                        <span class="badge red">Insert/Delete: O(N)</span>
+                    </div>
+                </header>
+
+                <div class="theory-section">
+                    <h3>📚 基礎觀念補給站</h3>
+                    <div class="theory-card">
+                        <h4>什麼是陣列？</h4>
+                        <p>陣列就像是一排<strong>連續的儲物櫃</strong>，每個櫃子都有編號（索引 Index）。</p>
+                        <ul>
+                            <li><strong>隨機存取 (Random Access):</strong> 因為記憶體是連續的，電腦可以用公式 <code>位址 = 起始點 + 索引 × 大小</code> 瞬間找到資料，這就是 O(1) 的由來。</li>
+                            <li><strong>靜態 vs 動態:</strong> 傳統陣列 (Static) 大小固定。動態陣列 (Dynamic) 當空間滿了時，會自動建立一個更大的陣列（通常是 2 倍）並搬移資料。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="interactive-area">
+                    <h3>🎨 互動實驗室</h3>
+                    <div class="control-panel">
+                        <input type="number" id="arr-val" placeholder="數值" value="99">
+                        <input type="number" id="arr-idx" placeholder="索引" value="2">
+                        <button onclick="insertArrayAt()">插入 (Insert)</button>
+                        <button onclick="deleteArrayAt()" class="btn-warn">刪除 (Delete)</button>
+                    </div>
+                    <div class="visual-container" id="array-container"></div>
+                    <p class="hint-text">💡 觀察重點：插入中間位置時，黃色方塊如何「集體搬家」。</p>
+                </div>
+
+                <div class="code-block">
+                    <h3>💻 C 語言實作：插入邏輯</h3>
+                    <pre><code class="language-c">
+// 在 index 位置插入 value
+void insert(int arr[], int *n, int index, int value) {
+    // 1. 從最後面開始，將資料往後搬移 (Shifting)
+    for (int i = *n; i > index; i--) {
+        arr[i] = arr[i - 1]; // O(N) 的主因
+    }
+    // 2. 放入新資料
+    arr[index] = value;
+    (*n)++; // 更新大小
+}
+                    </code></pre>
+                </div>
+
+                <div class="quiz-section">
+                    <h3>📝 隨堂測驗</h3>
+                    
+                    <div class="quiz-card">
+                        <p class="question">1. 為什麼在陣列索引 0 插入元素最慢？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, false)">因為要重新分配記憶體</button>
+                            <button onclick="checkAnswer(this, true)">因為所有後續元素都要往後移 (Shifting)</button>
+                            <button onclick="checkAnswer(this, false)">因為 O(1) 存取變慢了</button>
+                        </div>
+                        <p class="explanation">解析：在頭部插入 (i=0) 是最壞情況，因為需要移動 N 個元素。</p>
+                    </div>
+
+                    <div class="quiz-card">
+                        <p class="question">2. 陣列的哪個操作是 O(1)？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, false)">搜尋特定值 (Search)</button>
+                            <button onclick="checkAnswer(this, true)">根據索引取得資料 (Get/Access)</button>
+                            <button onclick="checkAnswer(this, false)">刪除資料</button>
+                        </div>
+                        <p class="explanation">解析：Get(i) 是 O(1)，只要知道索引就能算出記憶體位置。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="stacks" class="view">
+                <header>
+                    <h1>2. 堆疊 (Stack) 與 佇列 (Queue)</h1>
+                </header>
+
+                <div class="theory-section">
+                    <h3>📚 基礎觀念補給站</h3>
+                    <div class="theory-grid">
+                        <div class="theory-card">
+                            <h4>Stack (堆疊)</h4>
+                            <p><strong>LIFO (後進先出)</strong>。就像疊盤子，最後放上去的盤子必須最先拿走。應用於函式呼叫堆疊、Undo 復原功能。</p>
+                        </div>
+                        <div class="theory-card">
+                            <h4>Circular Queue (環狀佇列)</h4>
+                            <p><strong>FIFO (先進先出)</strong>。為了解決陣列實作 Queue 時前方空間無法回收的問題，我們讓索引「繞圈圈」，公式：<code>(rear + 1) % size</code>。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="split-view">
+                    <div class="panel">
+                        <h4>Stack 演示</h4>
+                        <div class="visual-stack-container" id="stack-visual"></div>
+                        <div class="controls">
+                            <button onclick="pushStack()">Push</button>
+                            <button onclick="popStack()" class="btn-warn">Pop</button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h4>Circular Queue 演示</h4>
+                        <div class="queue-grid" id="queue-grid"></div>
+                        <div class="queue-info">Front: <span id="q-front">0</span> | Rear: <span id="q-rear">0</span></div>
+                        <div class="controls">
+                            <button onclick="enqueue()">Enqueue</button>
+                            <button onclick="dequeue()" class="btn-warn">Dequeue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-section">
+                    <h3>📝 隨堂測驗</h3>
+                    <div class="quiz-card">
+                        <p class="question">1. 若使用陣列實作 Queue，且不使用環狀技巧，移除(Dequeue)元素會有什麼問題？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, true)">前面的記憶體空間會被浪費無法重複使用</button>
+                            <button onclick="checkAnswer(this, false)">會造成 Stack Overflow</button>
+                            <button onclick="checkAnswer(this, false)">操作會變成 O(N)</button>
+                        </div>
+                        <p class="explanation">解析：如果不循環使用，隨著 front 往後移，前面的空間就無法再寫入資料。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="linkedlists" class="view">
+                <header>
+                    <h1>3. 鏈結串列 (Linked Lists)</h1>
+                    <div class="complexity-badges">
+                        <span class="badge green">Add Head: O(1)</span>
+                        <span class="badge yellow">Search: O(N)</span>
+                    </div>
+                </header>
+
+                <div class="theory-section">
+                    <h3>📚 基礎觀念補給站</h3>
+                    <div class="theory-card">
+                        <p>Linked List 像是一場<strong>尋寶遊戲</strong>，每個節點 (Node) 都有兩部分：</p>
+                        <ul>
+                            <li><strong>Data:</strong> 寶藏本身。</li>
+                            <li><strong>Next Pointer:</strong> 下一個藏寶點的線索 (記憶體位址)。</li>
+                        </ul>
+                        <p>優點是記憶體不需連續，且擴充容易；缺點是無法像陣列一樣直接跳到第 N 個位置，必須從頭開始找。</p>
+                    </div>
+                </div>
+
+                <div class="interactive-area">
+                    <div class="control-panel">
+                        <input type="text" id="ll-val" placeholder="數值" value="Node">
+                        <button onclick="addToHead()">新增至頭部 (Head)</button>
+                        <button onclick="addToTail()">新增至尾部 (Tail)</button>
+                        <button onclick="removeHead()" class="btn-warn">移除頭部</button>
+                    </div>
+                    <div class="ll-container" id="ll-visual"></div>
+                </div>
+
+                <div class="code-block">
+                    <h3>💻 C 語言實作：節點結構</h3>
+                    <pre><code class="language-c">
+struct Vertex {
+    int item;            // 資料
+    struct Vertex* next; // 指標：指向下一個 Vertex
+};
+// 記憶體是非連續的，靠 malloc 動態分配
+                    </code></pre>
+                </div>
+
+                <div class="quiz-section">
+                    <h3>📝 隨堂測驗</h3>
+                    <div class="quiz-card">
+                        <p class="question">1. 在 Linked List 中搜尋第 K 個元素的時間複雜度是多少？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, false)">O(1)</button>
+                            <button onclick="checkAnswer(this, true)">O(N)</button>
+                            <button onclick="checkAnswer(this, false)">O(log N)</button>
+                        </div>
+                        <p class="explanation">解析：Linked List 必須從 Head 開始順著指標走，無法直接計算位址。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="trees" class="view">
+                <header>
+                    <h1>4. 二元搜尋樹 (BST)</h1>
+                </header>
+
+                <div class="theory-section">
+                    <h3>📚 基礎觀念補給站</h3>
+                    <div class="theory-card">
+                        <p>BST 是一種特殊的樹，遵守嚴格規則：<strong>左 &lt; 根 &lt; 右</strong>。</p>
+                        <p>這個特性讓搜尋變得非常快 (類似猜數字遊戲，每次都猜中間，排除一半)，平均只要 <strong>O(log N)</strong>。但如果樹歪一邊 (Skewed)，最壞會退化成 O(N) 的 Linked List。</p>
+                    </div>
+                </div>
+
+                <div class="interactive-area">
+                    <div class="control-panel">
+                        <input type="number" id="tree-val" placeholder="整數">
+                        <button onclick="addTreeNode()">插入節點</button>
+                        <button onclick="resetTree()" class="btn-warn">重置</button>
+                    </div>
+                    <canvas id="treeCanvas" width="800" height="400"></canvas>
+                </div>
+
+                <div class="quiz-section">
+                    <h3>📝 隨堂測驗</h3>
+                    <div class="quiz-card">
+                        <p class="question">1. 在 BST 中，比根節點(Root)小的數字會放在哪裡？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, true)">左子樹 (Left Subtree)</button>
+                            <button onclick="checkAnswer(this, false)">右子樹 (Right Subtree)</button>
+                            <button onclick="checkAnswer(this, false)">不一定</button>
+                        </div>
+                        <p class="explanation">解析：這是 BST 的定義，左邊永遠比根小，右邊永遠比根大。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="graphs" class="view">
+                <header>
+                    <h1>5. 圖論基礎 (Graphs)</h1>
+                </header>
+
+                <div class="theory-section">
+                    <h3>📚 基礎觀念補給站</h3>
+                    <div class="theory-card">
+                        <p>圖是用來描述「關係」的結構，由<strong>頂點 (Vertex)</strong> 和 <strong>邊 (Edge)</strong> 組成。</p>
+                        <ul>
+                            <li><strong>BFS (廣度優先):</strong> 像水波擴散，使用 Queue。適合找最短路徑。</li>
+                            <li><strong>DFS (深度優先):</strong> 像走迷宮一條路走到黑，使用 Stack (或遞迴)。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="interactive-area">
+                    <p class="hint-text">🖱️ 點擊空白處新增點，依序點擊兩點連線。</p>
+                    <div class="control-panel">
+                        <button onclick="clearGraph()">清除畫布</button>
+                    </div>
+                    <canvas id="graphCanvas" width="800" height="400"></canvas>
+                </div>
+
+                <div class="quiz-section">
+                    <h3>📝 隨堂測驗</h3>
+                    <div class="quiz-card">
+                        <p class="question">1. 實作 BFS (廣度優先搜尋) 通常使用哪種資料結構？</p>
+                        <div class="options">
+                            <button onclick="checkAnswer(this, false)">Stack (堆疊)</button>
+                            <button onclick="checkAnswer(this, true)">Queue (佇列)</button>
+                            <button onclick="checkAnswer(this, false)">Array (陣列)</button>
+                        </div>
+                        <p class="explanation">解析：BFS 使用 Queue 來記錄待訪問的鄰居節點，以保持「先進先出」的順序。</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

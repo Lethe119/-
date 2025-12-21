@@ -1,0 +1,135 @@
+/* style.css */
+
+:root {
+    --primary: #3498db;
+    --secondary: #2ecc71;
+    --danger: #e74c3c;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --bg: #f8f9fa;
+    --sidebar-width: 260px;
+    --code-bg: #1e1e1e;
+}
+
+body {
+    margin: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: #333;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 佈局 */
+.app-layout { display: flex; height: 100%; }
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--dark);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+.brand { padding: 20px; font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid #444; }
+.brand .tag { font-size: 0.8rem; background: #f1c40f; color: #333; padding: 2px 6px; border-radius: 4px; }
+.menu { list-style: none; padding: 0; margin: 0; }
+.menu li { padding: 15px 20px; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
+.menu li:hover { background: rgba(255,255,255,0.1); }
+.menu li.active { background: rgba(255,255,255,0.1); border-left-color: var(--secondary); }
+
+.content { flex: 1; padding: 30px; overflow-y: auto; }
+.view { display: none; animation: fadeIn 0.4s; }
+.view.active { display: block; }
+
+/* 標題與徽章 */
+h1 { margin-top: 0; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+.complexity-badges { margin: 10px 0 20px; }
+.badge { padding: 4px 8px; border-radius: 4px; color: white; margin-right: 5px; font-size: 0.85rem; font-family: 'Fira Code', monospace; }
+.badge.green { background: var(--secondary); }
+.badge.yellow { background: #f39c12; color: #333; }
+.badge.red { background: var(--danger); }
+
+/* --- 理論區塊 --- */
+.theory-section { margin-bottom: 25px; }
+.theory-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #9b59b6;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+}
+.theory-card h4 { margin-top: 0; color: #8e44ad; }
+.theory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+/* --- 互動區 --- */
+.interactive-area {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    border: 1px solid #eee;
+}
+.control-panel { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 80px; }
+button { padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; }
+button:hover { opacity: 0.9; }
+button.btn-warn { background: var(--danger); }
+.hint-text { color: #7f8c8d; font-size: 0.9rem; margin-top: 10px; }
+
+/* --- 視覺化元件 --- */
+.visual-container { display: flex; gap: 5px; min-height: 60px; align-items: center; }
+.array-cell {
+    width: 50px; height: 50px; border: 2px solid var(--dark); border-radius: 4px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: bold; background: white; transition: 0.3s;
+}
+.array-cell small { font-size: 0.7rem; color: #888; }
+.shifting { background: #ffeeba !important; transform: translateX(10px); }
+.highlight { background: #d4edda !important; transform: scale(1.1); }
+
+/* Stack & Queue */
+.split-view { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.panel { background: #fff; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #ddd; }
+.visual-stack-container {
+    width: 80px; height: 160px; border: 3px solid var(--dark); border-top: none;
+    margin: 0 auto 10px; display: flex; flex-direction: column-reverse; background: #eee;
+}
+.stack-box { height: 30px; background: #f1c40f; margin-bottom: 2px; display: flex; align-items: center; justify-content: center; font-weight: bold; animation: dropIn 0.3s; }
+.queue-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; margin-bottom: 10px; }
+.q-cell { height: 35px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; background: white; font-size: 0.9rem; }
+
+/* Linked List */
+.ll-container { display: flex; align-items: center; overflow-x: auto; padding: 10px 0; }
+.ll-node { display: flex; align-items: center; margin-right: 5px; animation: slideRight 0.3s; }
+.ll-data { width: 50px; height: 35px; background: var(--dark); color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-family: 'Fira Code', monospace; }
+.ll-arrow { width: 30px; height: 2px; background: #555; position: relative; }
+.ll-arrow::after { content: ''; position: absolute; right: 0; top: -4px; border: 5px solid transparent; border-left-color: #555; }
+
+/* --- 程式碼區 --- */
+.code-block { background: var(--code-bg); padding: 15px; border-radius: 8px; margin-bottom: 25px; color: #dcdcdc; font-family: 'Fira Code', monospace; overflow-x: auto; }
+.code-block h3 { color: #61afef; margin-top: 0; font-size: 1rem; border-bottom: 1px solid #444; padding-bottom: 5px; }
+
+/* --- 測驗區 --- */
+.quiz-section { margin-top: 30px; }
+.quiz-card {
+    background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;
+    margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.question { font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.options button {
+    background: #f8f9fa; color: #333; border: 1px solid #ccc; text-align: left;
+    transition: 0.2s;
+}
+.options button:hover { background: #e9ecef; }
+.options button.correct { background: #d4edda; border-color: var(--secondary); color: #155724; }
+.options button.wrong { background: #f8d7da; border-color: var(--danger); color: #721c24; }
+.explanation { display: none; margin-top: 10px; padding: 10px; background: #eefcfd; border-radius: 4px; color: #0c5460; font-size: 0.95rem; }
+
+/* Canvas */
+canvas { background: white; border: 1px dashed #ccc; width: 100%; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dropIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideRight { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
